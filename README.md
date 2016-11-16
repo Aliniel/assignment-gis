@@ -20,8 +20,24 @@ Build a map-based application, which lets the user see geo-based data on a map a
 
 Fill in (either in English, or in Slovak):
 
-**Application description**: `<fill in>`
+### Application description
 
-**Data source**: `<fill in>`
+The application's purpose is to help users find their optimal appartment buildings. The user can input multiple points of interest they want near their appartment. The app will then highlight the optimal appartment buildings that fit these criteria.
 
-**Technologies used**: `<fill in>`
+**Possible scenario:** The user wants following points of interest near his appartment:
+* Lidl supermarket at 500 meters,
+* Post Office at 1000 meters,
+* any ATM machine at 300 meters,
+* a bus station at 200 meters.
+
+### Data source:
+
+All the data used in this app are from the **OpenStreetMap**.
+
+### Technologies used:
+
+The app consists of a front-end and a back-end.
+
+The front-end is written in _HTML5_, styled with _CSS_ with a help of _JavaScript_ and _jQuery_ library. For the map itself, I've used an API from Mapbox, called _Mapbox GL JS_.
+
+The back-end is written in _PHP_ running on the _Apache_ web server. The data is saved in _PostgreSQL_ with _PostGIS_ extension.
