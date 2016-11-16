@@ -14,11 +14,11 @@ Build a map-based application, which lets the user see geo-based data on a map a
 
 ## Data sources
 
-- [Open Street Maps](https://www.openstreetmap.org/)
+All the data used in the app are aquired from the [Open Street Maps](https://www.openstreetmap.org/).
 
 ## My project
 
-Fill in (either in English, or in Slovak):
+More complete documentation can be found [here](documentation.md).
 
 ### Application description
 
@@ -30,11 +30,11 @@ The application's purpose is to help users find their optimal appartment buildin
 * any ATM machine at 300 meters,
 * a bus station at 200 meters.
 
-### Data source:
+### Data source
 
 All the data used in this app are from the **OpenStreetMap**.
 
-### Technologies used:
+### Technologies used
 
 The app consists of a front-end and a back-end.
 
