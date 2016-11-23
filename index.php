@@ -3,6 +3,8 @@
         <!-- CSS -->
         <link href='https://api.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet'/>
         <link href='css/domus-optimus.css' rel='stylesheet'/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
         <!-- End of CSS -->
     </head>
 
@@ -12,64 +14,27 @@
             <!-- Main Menu -->
             <div id='main-menu'>
                 <form>
-                    <select name="select-1">
-                        <option selected value=""> -- Select an Option -- </option>
-                        <option value="shop">Shop</option>
-                        <option value="post_office">Post Office</option>
-                        <option value="amt">AMT</option>
-                        <option value="bus_stops">Bus Stop</option>
-                    </select>
-                    <input type="text" name="input-1"></input>
-                    <div>
-                        Distance:
-                        <input type="range" name="range-1" value="200" min="50" max="1000" step="10" oninput="rangeOutputUpdate(this)">
-                        <output>200</output>m
+                    <div class="option-group">
+                        <select name="select-1" class="dropdown-list">
+                            <option selected value=""> -- Select an Option -- </option>
+                            <option value="shop">Shop</option>
+                            <option value="post_office">Post Office</option>
+                            <option value="amt">AMT</option>
+                            <option value="bus_stops">Bus Stop</option>
+                        </select>
+                        <input type="text" name="input-1" class="input-field"></input>
+                        <div>
+                            Distance:
+                            <input type="range" name="range-1" value="200" min="50" max="1000" step="10" oninput="rangeOutputUpdate(this)">
+                            <output>200</output>m
+                        </div>
                     </div>
 
-                    <select name="select-2">
-                        <option selected value> -- Select an Option -- </option>
-                        <option value="shop">Shop</option>
-                        <option value="post_office">Post Office</option>
-                        <option value="amt">AMT</option>
-                        <option value="bus_stops">Bus Stop</option>
-                    </select>
-                    <input type="text" name="input-2"></input>
-                    <div>
-                        Distance:
-                        <input type="range" name="range-2" value="200" min="50" max="1000" step="10" oninput="rangeOutputUpdate(this)">
-                        <output>200</output>m
-                    </div>
+                    <i id="add-button" class="fa fa-plus-circle fa-2x" aria-hidden="true" onclick="addOptionGroup()"></i>
+                    <br/>
 
-                    <select name="select-3">
-                        <option selected value> -- Select an Option -- </option>
-                        <option value="shop">Shop</option>
-                        <option value="post_office">Post Office</option>
-                        <option value="amt">AMT</option>
-                        <option value="bus_stops">Bus Stop</option>
-                    </select>
-                    <input type="text" name="input-3"></input>
-                    <div>
-                        Distance:
-                        <input type="range" name="range-3" value="200" min="50" max="1000" step="10" oninput="rangeOutputUpdate(this)">
-                        <output>200</output>m
-                    </div>
-
-                    <select name="select-4">
-                        <option selected value> -- Select an Option -- </option>
-                        <option value="shop">Shop</option>
-                        <option value="post_office">Post Office</option>
-                        <option value="amt">AMT</option>
-                        <option value="bus_stops">Bus Stop</option>
-                    </select>
-                    <input type="text" name="input-4"></input>
-                    <div>
-                        Distance:
-                        <input type="range" name="range-4" value="200" min="50" max="1000" step="10" oninput="rangeOutputUpdate(this)">
-                        <output>200</output>m
-                    </div>
-
-                    <input type="button" name="button" onclick="processData()"/>
-                    <input type="reset" name="reset" onclick="clearMap()"/>
+                    <input id="submit-button" type="button" name="button" onclick="processData()" value="Submit"/>
+                    <input id="reset-button"type="reset" name="reset" onclick="clearMap();removeOptionGroups()" value="Reset"/>
                 </form>
             </div>
             <!-- End of Main Menu -->

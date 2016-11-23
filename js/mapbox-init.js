@@ -38,7 +38,7 @@ function processData(){
                       visibility: 'visible'
                     },
                     paint: {
-                      'fill-color': 'rgba(0,0,255,1)'
+                      'fill-color': 'rgba(24,152,212,0.8)'
                     }
                 });
             }

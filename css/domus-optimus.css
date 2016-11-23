@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    font-family: 'Open Sans', sans-serif;
 }
 
 #main-menu {
@@ -9,8 +10,67 @@ body {
     height: 100%;
     background-color: #1898D4;
     z-index: 100;
+    text-align: center;
 }
 
 #map {
     position: relative;
+}
+
+.dropdown-list {
+    margin-top: 10px;
+    width: 200px;
+    height: 25px;
+    text-align-last: center;
+    font-family: 'Open Sans', sans-serif;
+    border: none;
+    border-radius: 10px;
+    background-color: #18D498;
+    color: white;
+}
+
+.dropdown-list:first-of-type {
+    margin-top: 0px;
+}
+
+ .input-field {
+     margin-top: 5px;
+     width: 200px;
+     text-align: center;
+ }
+
+#main-menu form {
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#add-button {
+    margin: 10px;
+    color: white;
+}
+#add-button:hover {
+    cursor: pointer;
+}
+
+hr {
+    width: 80%;
+    border-style: solid;
+}
+
+#submit-button, #reset-button {
+    width: 100px;
+    height: 25px;
+    border: none;
+    border-radius: 5px;
+    background-color: #18D498;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-size: 16;
+}
+
+#submit-button:hover, #reset-button:hover {
+    background-color: #13A979;
+    cursor: pointer;
 }
