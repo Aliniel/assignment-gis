@@ -7,9 +7,8 @@ function rangeOutputUpdate(rangeElement) {
 function addOptionGroup() {
     var optionGroup = $(".option-group");
     var n = optionGroup.length + 1;
-    if (n > 7) {
-        alert("Maximum number of options shown already.");
-        return;
+    if (n == 7) {
+        $("#add-button").css("display", "none");
     }
 
     var newOptionGroup = optionGroup.first().clone();
@@ -26,4 +25,5 @@ function addOptionGroup() {
 function removeOptionGroups() {
     $(".option-group:not(:first)").remove();
     $("hr").remove();
+    $("#add-button").css("display", "");
 }
