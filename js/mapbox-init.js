@@ -9,6 +9,8 @@ var map = new mapboxgl.Map({
     zoom: 12
 });
 
+var activeLayers = [];
+
 /* Get user input and run the query */
 function processData(){
     var xmlhttp = new XMLHttpRequest();
@@ -91,17 +93,11 @@ function clearMap(){
         map.removeSource("optimal-buildings");
         map.removeLayer("optimal-buildings-layer");
     }
-    if (map.getLayer("supermarket-layer") != undefined){
-        map.setLayoutProperty("supermarket-layer", 'visibility', 'none');
-    }
-    if (map.getLayer("post_office-layer") != undefined){
-        map.setLayoutProperty("post_office-layer", 'visibility', 'none');
-    }
-    if (map.getLayer("atm-layer") != undefined){
-        map.setLayoutProperty("atm-layer", 'visibility', 'none');
-    }
-    if (map.getLayer("bus_stops-layer") != undefined){
-        map.setLayoutProperty("bus_stops-layer", 'visibility', 'none');
+
+    for (layer in activeLayers) {
+        if (map.getLayer(activeLayers[layer] + "-layer") != undefined){
+            map.setLayoutProperty(activeLayers[layer] + "-layer", 'visibility', 'none');
+        }
     }
 }
 
@@ -128,6 +124,7 @@ function setPins(geoJson, type, icon) {
               'icon-allow-overlap': true
             }
         });
+        activeLayers.push(type);
     }
     /* Clear Map */
     else{
