@@ -38,7 +38,7 @@ function processData(){
                       visibility: 'visible'
                     },
                     paint: {
-                      'fill-color': 'rgba(24,152,212,0.8)'
+                      'fill-color': 'rgba(212,33,24,0.3)'
                     }
                 });
             }
@@ -54,7 +54,8 @@ function processData(){
     }
 
     /* Get user input */
-    var selects = $("select");
+    var city = $("#city-dropdown").val();
+    var selects = $("select:not('#city-dropdown')");
     var names = $("input[type='text']");
     var ranges = $("input[type='range']");
 
@@ -70,7 +71,7 @@ function processData(){
             paramNum ++;
         }
     }
-    params = "?paramNum=" + paramNum + params;
+    params = "?city=" + city + "&paramNum=" + paramNum + params;
 
     /* Send request to PHP */
     xmlhttp.open("GET", "get-data.php" + params, true);

@@ -13,11 +13,18 @@
 
             <!-- Main Menu -->
             <div id='main-menu'>
+                <select id="city-dropdown" name="city" class="dropdown-list">
+                    <option selected value="Bratislava">Bratislava</option>
+                    <option value="Košice">Košice</option>
+                    <option value="Žilina">Žilina</option>
+                    <option value="Banská Bystrica">Banská Bystrica</option>
+                </select>
+
                 <form>
                     <div class="option-group">
                         <select name="select-1" class="dropdown-list">
-                            <option selected value=""> -- Select an Option -- </option>
-                            <option value="shop">Shop</option>
+                            <option selected value=""> -- Select Point of Interest -- </option>
+                            <option value="supermarket">Supermarket</option>
                             <option value="post_office">Post Office</option>
                             <option value="amt">AMT</option>
                             <option value="bus_stops">Bus Stop</option>

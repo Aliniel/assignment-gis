@@ -28,9 +28,12 @@ body {
     background-color: #18D498;
     color: white;
 }
-
 .dropdown-list:first-of-type {
     margin-top: 0px;
+}
+#city-dropdown {
+    position: relative;
+    top: 2%;
 }
 
  .input-field {
