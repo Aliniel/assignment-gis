@@ -27,7 +27,7 @@
                             <option selected value=""> -- Select Point of Interest -- </option>
                             <option value="supermarket">Supermarket</option>
                             <option value="post_office">Post Office</option>
-                            <option value="amt">AMT</option>
+                            <option value="atm">ATM</option>
                             <option value="bus_stops">Bus Stop</option>
                         </select>
                         <input type="text" name="input-1" class="input-field"></input>

@@ -3,6 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpbmllbCIsImEiOiJjaXVxcHNqcDEwMDA5Mm9wZ2o2N
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v9',
+    // style: 'mapbox://styles/mapbox/light-v9',
     /* Center to Bratislava */
     center: [17.12,48.15],
     zoom: 12
@@ -23,11 +24,17 @@ function processData(){
             /* Parse GeoJSON output from PHP/PostGIS */
             geoJson = JSON.parse(this.responseText);
 
-            /* Define source */
+            /* Add sources for pins */
+            setPins(geoJson.supermarket, "supermarket", "shop-15");
+            setPins(geoJson.post_office, "post_office", "post-15");
+            setPins(geoJson.atm, "atm", "bank-15");
+            setPins(geoJson.bus_stops, "bus_stops", "bus-15");
+
+            /* Define source for building appartments */
             if (map.getSource("optimal-buildings") == undefined) {
                 map.addSource("optimal-buildings", {
                     "type": "geojson",
-                    "data": geoJson
+                    "data": JSON.parse(geoJson.building)
                 });
                 map.addLayer({
                     id: "optimal-buildings-layer",
@@ -47,7 +54,7 @@ function processData(){
                 map.removeSource("optimal-buildings");
                 map.addSource("optimal-buildings", {
                     "type": "geojson",
-                    "data": geoJson
+                    "data": JSON.parse(geoJson.building)
                 });
             }
         }
@@ -72,7 +79,7 @@ function processData(){
         }
     }
     params = "?city=" + city + "&paramNum=" + paramNum + params;
-
+7
     /* Send request to PHP */
     xmlhttp.open("GET", "get-data.php" + params, true);
     xmlhttp.send();
@@ -83,5 +90,52 @@ function clearMap(){
     if (map.getSource("optimal-buildings") != undefined){
         map.removeSource("optimal-buildings");
         map.removeLayer("optimal-buildings-layer");
+    }
+    if (map.getLayer("supermarket-layer") != undefined){
+        map.setLayoutProperty("supermarket-layer", 'visibility', 'none');
+    }
+    if (map.getLayer("post_office-layer") != undefined){
+        map.setLayoutProperty("post_office-layer", 'visibility', 'none');
+    }
+    if (map.getLayer("atm-layer") != undefined){
+        map.setLayoutProperty("atm-layer", 'visibility', 'none');
+    }
+    if (map.getLayer("bus_stops-layer") != undefined){
+        map.setLayoutProperty("bus_stops-layer", 'visibility', 'none');
+    }
+}
+
+/* Add source and layer for Supermarkets */
+function setPins(geoJson, type, icon) {
+    if (geoJson == undefined) {
+        if (map.getSource(type) != undefined) {
+            map.setLayoutProperty(type + "-layer", 'visibility', 'none');
+        }
+        return;
+    }
+    if (map.getSource(type) == undefined) {
+        map.addSource(type, {
+            "type": "geojson",
+            "data": JSON.parse(geoJson)
+        });
+        map.addLayer({
+            id: type + "-layer",
+            type: 'symbol',
+            source: type,
+            "source-layer": type,
+            layout: {
+              'icon-image': icon,
+              'icon-allow-overlap': true
+            }
+        });
+    }
+    /* Clear Map */
+    else{
+        map.removeSource(type);
+        map.addSource(type, {
+            "type": "geojson",
+            "data": JSON.parse(geoJson)
+        });
+        map.setLayoutProperty(type + "-layer", 'visibility', 'visible');
     }
 }
