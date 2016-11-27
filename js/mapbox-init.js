@@ -34,34 +34,7 @@ function processData(){
 
             /* Add sources for areas */
             setArea(geoJson.park, "park", "rgba(0,255,0,0.3)");
-
-            /* Define source for building appartments */
-            if (map.getSource("optimal-buildings") == undefined) {
-                map.addSource("optimal-buildings", {
-                    "type": "geojson",
-                    "data": JSON.parse(geoJson.building)
-                });
-                map.addLayer({
-                    id: "optimal-buildings-layer",
-                    type: "fill",
-                    source: "optimal-buildings",
-                    "source-layer": "optimal-buildings",
-                    layout: {
-                      visibility: 'visible'
-                    },
-                    paint: {
-                      'fill-color': 'rgba(255,0,0,0.3)'
-                    }
-                });
-            }
-            /* Update source */
-            else{
-                map.removeSource("optimal-buildings");
-                map.addSource("optimal-buildings", {
-                    "type": "geojson",
-                    "data": JSON.parse(geoJson.building)
-                });
-            }
+            setArea(geoJson.building, "building", "rgba(255,0,0,0.3)");
         }
     }
 
