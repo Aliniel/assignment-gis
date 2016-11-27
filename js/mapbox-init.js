@@ -57,7 +57,7 @@ function processData(){
         }
     }
     params = "?city=" + city + "&paramNum=" + paramNum + params;
-7
+    
     /* Send request to PHP */
     xmlhttp.open("GET", "get-data.php" + params, true);
     xmlhttp.send();
