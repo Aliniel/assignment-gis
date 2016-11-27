@@ -22,7 +22,7 @@ More complete documentation can be found [here](documentation.md).
 
 ### Application description
 
-The application's purpose is to help users find their optimal appartment buildings. The user can input multiple points of interest they want near their appartment. The app will then highlight the optimal appartment buildings that fit these criteria.
+The application's purpose is to help users find their optimal appartment buildings while allowing them maximum flexibility in choosing their own points of interest. The user can input multiple points of interest they want near their appartment. The app will then highlight the optimal appartment buildings that fit these criteria and also show all points of interest they chose.
 
 **Possible scenario:** The user wants following points of interest near his appartment:
 * Lidl supermarket at 500 meters,
