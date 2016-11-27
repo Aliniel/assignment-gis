@@ -2,8 +2,8 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWxpbmllbCIsImEiOiJjaXVxcHNqcDEwMDA5Mm9wZ2o2NGgwdTZuIn0.2qkLzYY98cu9j3S0uHV6Vw';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v9',
-    // style: 'mapbox://styles/mapbox/light-v9',
+    // style: 'mapbox://styles/mapbox/streets-v9',
+    style: 'mapbox://styles/mapbox/light-v9',
     /* Center to Bratislava */
     center: [17.12,48.15],
     zoom: 12
@@ -32,6 +32,9 @@ function processData(){
             setPins(geoJson.atm, "atm", "bank-15");
             setPins(geoJson.bus_stops, "bus_stops", "bus-15");
 
+            /* Add sources for areas */
+            setArea(geoJson.park, "park", "rgba(0,255,0,0.3)");
+
             /* Define source for building appartments */
             if (map.getSource("optimal-buildings") == undefined) {
                 map.addSource("optimal-buildings", {
@@ -47,7 +50,7 @@ function processData(){
                       visibility: 'visible'
                     },
                     paint: {
-                      'fill-color': 'rgba(212,33,24,0.3)'
+                      'fill-color': 'rgba(255,0,0,0.3)'
                     }
                 });
             }
@@ -101,7 +104,7 @@ function clearMap(){
     }
 }
 
-/* Add source and layer for Supermarkets */
+/* Add source and layer for Points of interest */
 function setPins(geoJson, type, icon) {
     if (geoJson == undefined) {
         if (map.getSource(type) != undefined) {
@@ -122,6 +125,44 @@ function setPins(geoJson, type, icon) {
             layout: {
               'icon-image': icon,
               'icon-allow-overlap': true
+            }
+        });
+        activeLayers.push(type);
+    }
+    /* Clear Map */
+    else{
+        map.removeSource(type);
+        map.addSource(type, {
+            "type": "geojson",
+            "data": JSON.parse(geoJson)
+        });
+        map.setLayoutProperty(type + "-layer", 'visibility', 'visible');
+    }
+}
+
+/* Add source and layer for Areas of interest */
+function setArea(geoJson, type, color) {
+    if (geoJson == undefined) {
+        if (map.getSource(type) != undefined) {
+            map.setLayoutProperty(type + "-layer", 'visibility', 'none');
+        }
+        return;
+    }
+    if (map.getSource(type) == undefined) {
+        map.addSource(type, {
+            "type": "geojson",
+            "data": JSON.parse(geoJson)
+        });
+        map.addLayer({
+            id: type + "-layer",
+            type: 'fill',
+            source: type,
+            "source-layer": type,
+            layout: {
+              visibility: 'visible'
+            },
+            paint: {
+              'fill-color': color
             }
         });
         activeLayers.push(type);

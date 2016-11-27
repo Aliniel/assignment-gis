@@ -27,3 +27,17 @@ function removeOptionGroups() {
     $("hr").remove();
     $("#add-button").css("display", "");
 }
+
+/* Limit max range for parks which take too long to execute. */
+function limitParkRange(select) {
+    if ($(select).val() == "park") {
+        var range = $(select).siblings("div:first").children("input[type='range']");
+        $(range).attr("max", 100);
+        $(range).siblings("output:first").val($(range).val());
+    }
+    else {
+        var range = $(select).siblings("div:first").children("input[type='range']");
+        $(range).attr("max", 1000);
+        $(range).siblings("output:first").val($(range).val());
+    }
+}

@@ -13,6 +13,8 @@ function getTable($param) {
         return "planet_osm_point";
     case "bus_stops":
         return "planet_osm_point";
+    case "park":
+        return "planet_osm_polygon";
     default:
         retun;
     }
@@ -29,18 +31,23 @@ function getCondition($param) {
         return "p.amenity = 'atm'";
     case "bus_stops":
         return "p.highway = 'bus_stop'";
+    case "park":
+        return "p.leisure = 'park'";
     default:
         retun;
     }
 }
 
 /* Build the base select - the most inner one. */
-function buildBaseQuery($param, $name, $range) {
+function buildBaseQuery($city, $param, $name, $range) {
     $query = "FROM planet_osm_polygon s ";
+    $query .= "JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c ";
+    $query .= "ON ST_WITHIN(s.way,c.city_geo) ";
     $query .= "JOIN " . getTable($param) . " p ";
     $query .= "ON ST_DWITHIN(s.way::geography, p.way::geography, " . $range . ") ";
     $query .= "WHERE s.building = 'apartments' ";
     $query .= "AND " . getCondition($param) . " ";
+    $query .= "AND ST_WITHIN(p.way,c.city_geo) ";
     if ($name != ""){
         $query .= "AND p.name = '" . $name . "' ";
     }
@@ -48,11 +55,14 @@ function buildBaseQuery($param, $name, $range) {
 }
 
 /* Build second part of query - JOIN, conditions... */
-function buildQueryEnding($param, $name, $range) {
+function buildQueryEnding($city, $param, $name, $range) {
     $query = ") AS s ";
+    $query .= "JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c ";
+    $query .= "ON ST_WITHIN(s.way,c.city_geo) ";
     $query .= "JOIN " . getTable($param) . " p ";
     $query .= "ON ST_DWITHIN(s.way::geography, p.way::geography, " . $range . ") ";
     $query .= "WHERE " . getCondition($param) . " ";
+    $query .= "AND ST_WITHIN(p.way,c.city_geo) ";
     if ($name != ""){
         $query .= "AND p.name = '" . $name . "' ";
     }
@@ -64,16 +74,16 @@ function getPostOffices($city) {
     $local_query = "(
         SELECT ST_AsGeoJSON(p.way)
         FROM planet_osm_point as p
-        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS s
-        ON ST_WITHIN(p.way,s.city_geo)
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
         WHERE p.amenity = 'post_office'
     )
     UNION ALL
     (
         SELECT ST_AsGeoJSON(p.way)
         FROM planet_osm_polygon as p
-        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS s
-        ON ST_WITHIN(p.way,s.city_geo)
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
         WHERE p.amenity = 'post_office'
     )";
     return runQuery($local_query);
@@ -82,8 +92,8 @@ function getPostOffices($city) {
 function getBusStations($city) {
     $local_query = "SELECT ST_AsGeoJSON(p.way)
         FROM planet_osm_point as p
-        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS s
-        ON ST_WITHIN(p.way,s.city_geo)
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
         WHERE highway = 'bus_stop'";
     return runQuery($local_query);
 }
@@ -91,8 +101,8 @@ function getBusStations($city) {
 function getATMs($city, $name) {
     $local_query = "SELECT ST_AsGeoJSON(p.way)
     FROM planet_osm_point as p
-    JOIN (SELECT city_geo FROM city_geo('Bratislava')) AS s
-    ON ST_WITHIN(p.way,s.city_geo)
+    JOIN (SELECT city_geo FROM city_geo('Bratislava')) AS c
+    ON ST_WITHIN(p.way,c.city_geo)
     WHERE p.amenity = 'atm' ";
 
     if ($name != "") {
@@ -105,8 +115,8 @@ function getSupermarkets($city, $name) {
     $local_query = "(
         SELECT ST_AsGeoJSON(p.way)
         FROM planet_osm_point as p
-        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS s
-        ON ST_WITHIN(p.way,s.city_geo)
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
         WHERE p.shop = 'supermarket'";
     if ($name != "") {
         $local_query .= "AND p.name LIKE '%" . $name . "%')";
@@ -117,8 +127,8 @@ function getSupermarkets($city, $name) {
     $local_query .= "UNION ALL (
         SELECT ST_AsGeoJSON(p.way)
         FROM planet_osm_polygon as p
-        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS s
-        ON ST_WITHIN(p.way,s.city_geo)
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
         WHERE p.shop = 'supermarket' ";
     if ($name != "") {
         $local_query .= "AND p.name LIKE '" . $name . "')";
@@ -126,6 +136,15 @@ function getSupermarkets($city, $name) {
     else {
         $local_query .= ")";
     }
+    return runQuery($local_query);
+}
+
+function getParks($city) {
+    $local_query = "SELECT ST_AsGeoJSON(p.way)
+        FROM planet_osm_polygon as p
+        JOIN (SELECT city_geo FROM city_geo('" . $city . "')) AS c
+        ON ST_WITHIN(p.way,c.city_geo)
+        WHERE p.leisure = 'park'";
     return runQuery($local_query);
 }
 
@@ -154,6 +173,9 @@ for ($i = 0; $i < $paramNum; $i++) {
     case "bus_stops":
         $results["bus_stops"] = getBusStations($city);
         break;
+    case "park":
+        $results["park"] = getParks($city);
+        break;
     }
 
     /* Core SELECT */
@@ -164,17 +186,17 @@ for ($i = 0; $i < $paramNum; $i++) {
         else {
             $query .= "SELECT DISTINCT ON (s.osm_id) s.osm_id, s.way ";
         }
-        $query .= buildBaseQuery($param, $name, $range);
+        $query .= buildBaseQuery($city, $param, $name, $range);
     }
     /* Final SELECT -> exporting to GeoJSON */
     else if ($i == $paramNum - 1) {
         $query = "SELECT DISTINCT ON (s.osm_id) ST_AsGeoJSON(s.way) FROM ( " . $query;
-        $query .= buildQueryEnding($param, $name, $range);
+        $query .= buildQueryEnding($city, $param, $name, $range);
     }
     /* Inter SELECTs and JOINs */
     else {
         $query = "SELECT DISTINCT ON (s.osm_id) s.osm_id, s.way FROM ( " . $query;
-        $query .= buildQueryEnding($param, $name, $range);
+        $query .= buildQueryEnding($city, $param, $name, $range);
     }
 }
 
