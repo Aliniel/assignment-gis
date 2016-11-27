@@ -6,7 +6,7 @@ The app find the optimal appartment building based on user input. The most impor
 * specify the distance in meters for every POI - the max distance the POI can be from the apartment
 
 App screenshot (GUI improvements planned):
-![Screenshot of the app.](http://prntscr.com/dcbngf)
+![Screenshot of the app.](http://image.prntscr.com/image/d20efd57d9424a708ae91e3a4e2c2cdc.png)
 
 The application has two parts: [front-end](#Front-end) which is built upon _[Mapbox GL API](https://www.mapbox.com/mapbox-gl-js/api/)_ and the [back-end](#Back-end) written in _PHP_ which runs on the _Apache Web Server_. The data is stored in _[PostgreSQL](https://www.postgresql.org/)_ databse with the _[PostGIS](http://www.postgis.net/)_ extension. The communication between the fron-end and back-end is handled with _JavaScript_ and _AJAX_.
 
